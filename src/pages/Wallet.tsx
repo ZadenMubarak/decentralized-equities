@@ -1,6 +1,7 @@
 import { Copy, ExternalLink, Send, Plus, Zap, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useWallet } from "@/hooks/useWallet";
 
 export default function Wallet() {
   const [walletConnected, setWalletConnected] = useState(false);
