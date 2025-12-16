@@ -3,100 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
+import { categories } from "@/models/categories";
+import { assets } from "../models/Assets";
+
 export default function Market() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-
-  const assets = [
-    {
-      id: 1,
-      name: "Tesla",
-      ticker: "TSLA-T",
-      price: 245.67,
-      change: 5.23,
-      volume: "$2.3B",
-      category: "stocks",
-      logo: "🚗",
-    },
-    {
-      id: 2,
-      name: "Apple",
-      ticker: "AAPL-T",
-      price: 189.45,
-      change: 3.45,
-      volume: "$1.8B",
-      category: "stocks",
-      logo: "🍎",
-    },
-    {
-      id: 3,
-      name: "Microsoft",
-      ticker: "MSFT-T",
-      price: 378.92,
-      change: -1.23,
-      volume: "$1.2B",
-      category: "stocks",
-      logo: "💻",
-    },
-    {
-      id: 4,
-      name: "Gold",
-      ticker: "AU-T",
-      price: 2045.23,
-      change: 2.15,
-      volume: "$890M",
-      category: "commodities",
-      logo: "✨",
-    },
-    {
-      id: 5,
-      name: "Oil (WTI)",
-      ticker: "WTI-T",
-      price: 78.45,
-      change: -2.34,
-      volume: "$650M",
-      category: "commodities",
-      logo: "🛢️",
-    },
-    {
-      id: 6,
-      name: "Bitcoin",
-      ticker: "BTC-T",
-      price: 42305.67,
-      change: 8.92,
-      volume: "$3.2B",
-      category: "crypto",
-      logo: "₿",
-    },
-    {
-      id: 7,
-      name: "Ethereum",
-      ticker: "ETH-T",
-      price: 2204.56,
-      change: 6.78,
-      volume: "$1.9B",
-      category: "crypto",
-      logo: "Ξ",
-    },
-    {
-      id: 8,
-      name: "EUR/USD",
-      ticker: "EURUSD-T",
-      price: 1.0845,
-      change: 0.45,
-      volume: "$1.1B",
-      category: "currencies",
-      logo: "💱",
-    },
-  ];
-
-  const categories = [
-    { value: "all", label: "All Assets" },
-    { value: "stocks", label: "Stocks" },
-    { value: "commodities", label: "Commodities" },
-    { value: "crypto", label: "Crypto" },
-    { value: "currencies", label: "Currencies" },
-  ];
 
   const filteredAssets = assets.filter((asset) => {
     const matchesSearch =
