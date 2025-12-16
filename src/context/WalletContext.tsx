@@ -6,24 +6,13 @@ import {
   ReactNode,
 } from "react"
 import { BrowserProvider } from "ethers"
+import MetaMaskSDK from "@metamask/sdk"
 
 /* ---------- Types ---------- */
-declare global {
-  interface Window {
-    ethereum?: {
-      request: (args: {
-        method: string
-        params?: unknown[]
-      }) => Promise<unknown>
-      on: (event: string, callback: (...args: any[]) => void) => void
-      removeListener: (event: string, callback: (...args: any[]) => void) => void
-    }
-  }
-}
-
 export type WalletState = {
   address: string
   chainId: number
+  provider: BrowserProvider
 }
 
 type WalletContextType = {
@@ -32,6 +21,14 @@ type WalletContextType = {
   disconnectWallet: () => void
 }
 
+/* ---------- MetaMask SDK (singleton) ---------- */
+const MMSDK = new MetaMaskSDK({
+  dappMetadata: {
+    name: "BlockTrade",
+    url: window.location.href,
+  },
+})
+
 /* ---------- Context ---------- */
 const WalletContext = createContext<WalletContextType | null>(null)
 
@@ -39,54 +36,72 @@ const WalletContext = createContext<WalletContextType | null>(null)
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [wallet, setWallet] = useState<WalletState | null>(null)
 
+  /* ---------- Connect ---------- */
   const connectWallet = async () => {
-    if (!window.ethereum) {
-      throw new Error("Wallet not detected")
+    const ethereum = MMSDK.getProvider()
+
+    if (!ethereum) {
+      throw new Error("MetaMask provider not available")
     }
 
-    const provider = new BrowserProvider(window.ethereum)
-    await provider.send("eth_requestAccounts", [])
+    const accounts = (await ethereum.request({
+      method: "eth_requestAccounts",
+    })) as string[]
 
+    if (!accounts || accounts.length === 0) {
+      throw new Error("No accounts returned")
+    }
+
+    const provider = new BrowserProvider(ethereum)
     const signer = await provider.getSigner()
     const network = await provider.getNetwork()
 
     setWallet({
       address: await signer.getAddress(),
       chainId: Number(network.chainId),
+      provider,
     })
   }
 
+  /* ---------- Disconnect ---------- */
   const disconnectWallet = () => {
     setWallet(null)
   }
 
-  /* ---------- Wallet Listeners ---------- */
+  /* ---------- SDK Event Listeners ---------- */
   useEffect(() => {
-    if (!window.ethereum) return
+    const ethereum = MMSDK.getProvider()
+    if (!ethereum) return
 
     const handleAccountsChanged = (accounts: string[]) => {
       if (accounts.length === 0) {
         setWallet(null)
       } else {
         setWallet((prev) =>
-          prev ? { ...prev, address: accounts[0] } : null
+          prev
+            ? { ...prev, address: accounts[0] }
+            : null
         )
       }
     }
 
-    const handleChainChanged = () => {
-      window.location.reload()
+    const handleChainChanged = (chainId: string) => {
+      setWallet((prev) =>
+        prev
+          ? { ...prev, chainId: Number(chainId) }
+          : null
+      )
     }
 
-    window.ethereum.on("accountsChanged", handleAccountsChanged)
-    window.ethereum.on("chainChanged", handleChainChanged)
+    ethereum.on("accountsChanged", handleAccountsChanged)
+    ethereum.on("chainChanged", handleChainChanged)
 
     return () => {
-      window.ethereum?.removeListener(
+      ethereum.removeListener(
         "accountsChanged",
         handleAccountsChanged
       )
-      window.ethereum?.removeListener(
+      ethereum.removeListener(
         "chainChanged",
         handleChainChanged
       )
@@ -106,7 +121,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 export const useWalletContext = () => {
   const context = useContext(WalletContext)
   if (!context) {
-    throw new Error("useWalletContext must be used within WalletProvider")
+    throw new Error(
+      "useWalletContext must be used within WalletProvider"
+    )
   }
   return context
 }
