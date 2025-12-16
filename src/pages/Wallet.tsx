@@ -11,7 +11,7 @@ import { useState } from "react"
 import { useWallet } from "@/hooks/useWallet"
 
 export default function Wallet() {
-  const { wallet, connectWallet, disconnectWallet } = useWallet()
+  const { wallet, connectWallet, disconnectWallet, isInitializing } = useWallet()
   const [copied, setCopied] = useState(false)
 
   const walletAddress = wallet?.address ?? ""
@@ -64,11 +64,12 @@ export default function Wallet() {
           </p>
 
           <div className="space-y-3 max-w-sm mx-auto">
-            <Button
-              onClick={connectWallet}
-              className="w-full h-12 text-base font-semibold"
-            >
-              MetaMask
+            <Button  
+              onClick={connectWallet}  
+              disabled={isInitializing}  
+              className="w-full h-12 text-base font-semibold"  
+            >  
+              {isInitializing ? "Connecting..." : "MetaMask"}  
             </Button>
 
             <Button variant="outline" disabled className="w-full h-12">
