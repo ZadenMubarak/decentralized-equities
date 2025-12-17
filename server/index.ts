@@ -22,6 +22,7 @@ export function createServer() {
   // app.get("/api/demo", handleDemo);
   app.get("/api/portfolio/:address", handlePortfolio);
   app.get("/api/market", handleMarketData);
+  app.get("/api/market", handleMarketData);
 
   return app;
 }

@@ -2,19 +2,20 @@ import { RequestHandler } from "express";
   
 export const handleMarketData: RequestHandler = async (req, res) => {  
   try {  
-    // Fetch real-time data from CoinGecko API  
+    // Fetch real-time data from CoinGecko API for crypto  
     const response = await fetch(  
-      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,tether&order=market_cap_desc&per_page=10&page=1&sparkline=false'  
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,binancecoin,cardano,solana,polkadot,ripple,dogecoin&order=market_cap_desc&per_page=10&page=1&sparkline=false'  
     );  
       
     if (!response.ok) throw new Error('Failed to fetch market data');  
       
     const cryptoData = await response.json();  
       
-    // Transform data to match your asset structure  
+    // Transform data to match your asset structure with real crypto prices  
     const marketAssets = [  
+      // Crypto with real prices  
       {  
-        id: 1,  
+        id: 15,  
         name: "Bitcoin",  
         ticker: "BTC-T",  
         price: cryptoData.find(c => c.id === 'bitcoin')?.current_price || 42305.67,  
@@ -24,8 +25,8 @@ export const handleMarketData: RequestHandler = async (req, res) => {
         logo: "₿",  
       },  
       {  
-        id: 2,  
-        name: "Ethereum",   
+        id: 16,  
+        name: "Ethereum",  
         ticker: "ETH-T",  
         price: cryptoData.find(c => c.id === 'ethereum')?.current_price || 2204.56,  
         change: cryptoData.find(c => c.id === 'ethereum')?.price_change_percentage_24h || 6.78,  
@@ -33,38 +34,289 @@ export const handleMarketData: RequestHandler = async (req, res) => {
         category: "crypto",  
         logo: "Ξ",  
       },  
-      // Add more assets with real or mock data  
       {  
-        id: 3,  
+        id: 17,  
+        name: "Binance Coin",  
+        ticker: "BNB-T",  
+        price: cryptoData.find(c => c.id === 'binancecoin')?.current_price || 245.78,  
+        change: cryptoData.find(c => c.id === 'binancecoin')?.price_change_percentage_24h || 4.56,  
+        volume: "$780M",  
+        category: "crypto",  
+        logo: "🔶",  
+      },  
+      {  
+        id: 18,  
+        name: "Cardano",  
+        ticker: "ADA-T",  
+        price: cryptoData.find(c => c.id === 'cardano')?.current_price || 0.58,  
+        change: cryptoData.find(c => c.id === 'cardano')?.price_change_percentage_24h || -1.23,  
+        volume: "$320M",  
+        category: "crypto",  
+        logo: "💙",  
+      },  
+      {  
+        id: 19,  
+        name: "Solana",  
+        ticker: "SOL-T",  
+        price: cryptoData.find(c => c.id === 'solana')?.current_price || 98.45,  
+        change: cryptoData.find(c => c.id === 'solana')?.price_change_percentage_24h || 12.34,  
+        volume: "$1.1B",  
+        category: "crypto",  
+        logo: "🟣",  
+      },  
+      {  
+        id: 20,  
+        name: "Polkadot",  
+        ticker: "DOT-T",  
+        price: cryptoData.find(c => c.id === 'polkadot')?.current_price || 7.89,  
+        change: cryptoData.find(c => c.id === 'polkadot')?.price_change_percentage_24h || 3.21,  
+        volume: "$290M",  
+        category: "crypto",  
+        logo: "⚫",  
+      },  
+      {  
+        id: 21,  
+        name: "Ripple",  
+        ticker: "XRP-T",  
+        price: cryptoData.find(c => c.id === 'ripple')?.current_price || 0.62,  
+        change: cryptoData.find(c => c.id === 'ripple')?.price_change_percentage_24h || -0.87,  
+        volume: "$1.4B",  
+        category: "crypto",  
+        logo: "🌊",  
+      },  
+      {  
+        id: 22,  
+        name: "Dogecoin",  
+        ticker: "DOGE-T",  
+        price: cryptoData.find(c => c.id === 'dogecoin')?.current_price || 0.089,  
+        change: cryptoData.find(c => c.id === 'dogecoin')?.price_change_percentage_24h || 15.67,  
+        volume: "$450M",  
+        category: "crypto",  
+        logo: "🐕",  
+      },  
+      // Stocks with mock data  
+      {  
+        id: 1,  
         name: "Tesla",  
-        ticker: "TSLA-T",   
+        ticker: "TSLA-T",  
         price: 245.67,  
         change: 5.23,  
         volume: "$2.3B",  
         category: "stocks",  
         logo: "🚗",  
       },  
-      // ... other assets  
+      {  
+        id: 2,  
+        name: "Apple",  
+        ticker: "AAPL-T",  
+        price: 189.45,  
+        change: 3.45,  
+        volume: "$1.8B",  
+        category: "stocks",  
+        logo: "🍎",  
+      },  
+      {  
+        id: 3,  
+        name: "Microsoft",  
+        ticker: "MSFT-T",  
+        price: 378.92,  
+        change: -1.23,  
+        volume: "$1.2B",  
+        category: "stocks",  
+        logo: "💻",  
+      },  
+      {  
+        id: 4,  
+        name: "Amazon",  
+        ticker: "AMZN-T",  
+        price: 145.32,  
+        change: 2.87,  
+        volume: "$2.1B",  
+        category: "stocks",  
+        logo: "📦",  
+      },  
+      {  
+        id: 5,  
+        name: "Google",  
+        ticker: "GOOGL-T",  
+        price: 138.21,  
+        change: 1.95,  
+        volume: "$1.5B",  
+        category: "stocks",  
+        logo: "🔍",  
+      },  
+      {  
+        id: 6,  
+        name: "NVIDIA",  
+        ticker: "NVDA-T",  
+        price: 485.09,  
+        change: 8.45,  
+        volume: "$3.8B",  
+        category: "stocks",  
+        logo: "🎮",  
+      },  
+      {  
+        id: 7,  
+        name: "Meta",  
+        ticker: "META-T",  
+        price: 312.45,  
+        change: -2.15,  
+        volume: "$1.9B",  
+        category: "stocks",  
+        logo: "📘",  
+      },  
+      {  
+        id: 8,  
+        name: "Netflix",  
+        ticker: "NFLX-T",  
+        price: 425.67,  
+        change: 4.32,  
+        volume: "$890M",  
+        category: "stocks",  
+        logo: "🎬",  
+      },  
+      // Commodities  
+      {  
+        id: 9,  
+        name: "Gold",  
+        ticker: "AU-T",  
+        price: 2045.23,  
+        change: 2.15,  
+        volume: "$890M",  
+        category: "commodities",  
+        logo: "✨",  
+      },  
+      {  
+        id: 10,  
+        name: "Silver",  
+        ticker: "AG-T",  
+        price: 24.56,  
+        change: 1.87,  
+        volume: "$450M",  
+        category: "commodities",  
+        logo: "🥈",  
+      },  
+      {  
+        id: 11,  
+        name: "Oil (WTI)",  
+        ticker: "WTI-T",  
+        price: 78.45,  
+        change: -2.34,  
+        volume: "$650M",  
+        category: "commodities",  
+        logo: "🛢️",  
+      },  
+      {  
+        id: 12,  
+        name: "Natural Gas",  
+        ticker: "NG-T",  
+        price: 2.87,  
+        change: -3.21,  
+        volume: "$320M",  
+        category: "commodities",  
+        logo: "🔥",  
+      },  
+      {  
+        id: 13,  
+        name: "Platinum",  
+        ticker: "PLAT-T",  
+        price: 945.32,  
+        change: 0.95,  
+        volume: "$180M",  
+        category: "commodities",  
+        logo: "⚪",  
+      },  
+      {  
+        id: 14,  
+        name: "Copper",  
+        ticker: "COP-T",  
+        price: 3.78,  
+        change: 1.45,  
+        volume: "$290M",  
+        category: "commodities",  
+        logo: "🔧",  
+      },  
+      // Currencies  
+      {  
+        id: 23,  
+        name: "EUR/USD",  
+        ticker: "EURUSD-T",  
+        price: 1.0845,  
+        change: 0.45,  
+        volume: "$1.1B",  
+        category: "currencies",  
+        logo: "💱",  
+      },  
+      {  
+        id: 24,  
+        name: "GBP/USD",  
+        ticker: "GBPUSD-T",  
+        price: 1.2734,  
+        change: -0.23,  
+        volume: "$890M",  
+        category: "currencies",  
+        logo: "🇬🇧",  
+      },  
+      {  
+        id: 25,  
+        name: "USD/JPY",  
+        ticker: "USDJPY-T",  
+        price: 149.87,  
+        change: 0.12,  
+        volume: "$750M",  
+        category: "currencies",  
+        logo: "🇯🇵",  
+      },  
+      {  
+        id: 26,  
+        name: "USD/CHF",  
+        ticker: "USDCHF-T",  
+        price: 0.9123,  
+        change: -0.08,  
+        volume: "$450M",  
+        category: "currencies",  
+        logo: "🇨🇭",  
+      },  
+      {  
+        id: 27,  
+        name: "AUD/USD",  
+        ticker: "AUDUSD-T",  
+        price: 0.6543,  
+        change: 0.34,  
+        volume: "$380M",  
+        category: "currencies",  
+        logo: "🇦🇺",  
+      },  
+      {  
+        id: 28,  
+        name: "USD/CAD",  
+        ticker: "USDCAD-T",  
+        price: 1.3456,  
+        change: -0.15,  
+        volume: "$420M",  
+        category: "currencies",  
+        logo: "🇨🇦",  
+      },  
     ];  
   
     res.status(200).json({ assets: marketAssets });  
   } catch (error) {  
     console.error('Market data fetch error:', error);  
-    // Fallback to mock data  
+    // Fallback to mock data if API fails  
     res.status(200).json({   
       assets: [  
         {  
           id: 1,  
-          name: "Bitcoin",  
-          ticker: "BTC-T",  
-          price: 42305.67,  
-          change: 8.92,  
-          volume: "$3.2B",   
-          category: "crypto",  
-          logo: "₿",  
+          name: "Tesla",  
+          ticker: "TSLA-T",  
+          price: 245.67,  
+          change: 5.23,  
+          volume: "$2.3B",  
+          category: "stocks",  
+          logo: "🚗",  
         },  
-        // ... rest of mock assets  
+        // ... include all fallback assets  
       ]  
-    });  
-  }  
-};
+    });
+ }
+ };
