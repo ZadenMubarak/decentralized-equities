@@ -42,43 +42,58 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [isInitializing, setIsInitializing] = useState(false)  
   
   const connectWallet = async () => {  
-    try {  
-      setIsInitializing(true)  
-      const sdk = getSDK()  
-      const ethereum = sdk.getProvider()  
-  
-      if (!ethereum) {  
-        throw new Error("MetaMask not installed. Please install MetaMask to continue.")  
-      }  
-  
-      const accounts = (await ethereum.request({  
-        method: "eth_requestAccounts",  
-      })) as string[]  
-  
-      if (!accounts || accounts.length === 0) {  
-        throw new Error("No accounts found. Please connect an account in MetaMask.")  
-      }  
-  
-      const provider = new BrowserProvider(ethereum)  
-      const signer = await provider.getSigner()  
-      const network = await provider.getNetwork()  
-  
-      setWallet({  
-        address: await signer.getAddress(),  
-        chainId: Number(network.chainId),  
-        provider,  
-      })  
-    } catch (error) {  
-      console.error("Wallet connection failed:", error)  
-      throw error  
-    } finally {  
-      setIsInitializing(false)  
+  try {  
+    const ethereum = MMSDK.getProvider()  
+      
+    if (!ethereum) {  
+      throw new Error("MetaMask not installed. Please install MetaMask to continue.")  
     }  
-  }  
   
-  const disconnectWallet = () => {  
+    // Always request accounts to ensure fresh permission prompt  
+    const accounts = (await ethereum.request({  
+      method: "eth_requestAccounts",  
+      params: [], // Empty params ensures fresh request  
+    })) as string[]  
+  
+    if (!accounts || accounts.length === 0) {  
+      throw new Error("No accounts found. Please connect an account in MetaMask.")  
+    }  
+  
+    const provider = new BrowserProvider(ethereum)  
+    const signer = await provider.getSigner()  
+    const network = await provider.getNetwork()  
+  
+    setWallet({  
+      address: await signer.getAddress(),  
+      chainId: Number(network.chainId),  
+      provider,  
+    })  
+  } catch (error) {  
+    console.error("Wallet connection failed:", error)  
+    throw error  
+  }  
+}  
+  
+  const disconnectWallet = async () => {  
+  try {  
+    const ethereum = MMSDK.getProvider()  
+    if (ethereum && ethereum.removeListener) {  
+      // Remove all event listeners  
+      ethereum.removeAllListeners()  
+    }  
+      
+    // Clear the wallet state  
+    setWallet(null)  
+      
+    // Optionally, you can try to disconnect from MetaMask  
+    // Note: MetaMask doesn't have a true disconnect API  
+    // This mainly ensures our app state is clean  
+  } catch (error) {  
+    console.error("Error during disconnect:", error)  
+    // Still clear local state even if disconnect fails  
     setWallet(null)  
   }  
+}  
   
   useEffect(() => {  
     const sdk = getSDK()  

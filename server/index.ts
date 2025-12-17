@@ -2,6 +2,8 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handlePortfolio } from "./routes/portfolio";
+import { handleMarketData } from "./routes/market"; 
 
 export function createServer() {
   const app = express();
@@ -17,7 +19,9 @@ export function createServer() {
     res.json({ message: ping });
   });
 
-  app.get("/api/demo", handleDemo);
+  // app.get("/api/demo", handleDemo);
+  app.get("/api/portfolio/:address", handlePortfolio);
+  app.get("/api/market", handleMarketData);
 
   return app;
 }

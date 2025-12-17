@@ -7,6 +7,22 @@
 /**
  * Example response type for /api/demo
  */
-export interface DemoResponse {
-  message: string;
+
+export interface DemoResponse {  
+  message: string;  
+}  
+  
+export interface PortfolioResponse {  
+  holdings: Holding[];  
+}  
+  
+export interface Holding {  
+  id: string;  
+  name: string;  
+  ticker: string;  
+  shares: number;  
+  costBasis: number;  
+  currentPrice: number;  
+  logo: string;  
+  blockchain: string;  
 }
