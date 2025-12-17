@@ -1,8 +1,8 @@
-require("@nomicfoundation/hardhat-toolbox");  
-require("dotenv").config();  
+import { HardhatUserConfig } from "hardhat/config";  
+import "@nomicfoundation/hardhat-toolbox";  
+import "dotenv/config";  
   
-/** @type import('hardhat/config').HardhatUserConfig */  
-module.exports = {  
+const config: HardhatUserConfig = {  
   solidity: {  
     version: "0.8.19",  
     settings: {  
@@ -44,4 +44,6 @@ module.exports = {
     enabled: process.env.REPORT_GAS !== undefined,  
     currency: "USD"  
   }  
-};
+};  
+  
+export default config;
