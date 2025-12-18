@@ -39,11 +39,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar */}  
       <aside  
         className={cn(  
-          "fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-xl transition-transform duration-300 z-40 lg:relative lg:translate-x-0",  
+          "fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-slate-900 to-slate-800 text-white shadow-xl transition-transform duration-300 z-40 lg:relative lg:translate-x-0 ",  
           sidebarOpen ? "translate-x-0" : "-translate-x-full"  
         )}  
       >  
-        <div className="flex flex-col h-full">  
+        <div className="flex flex-col h-full fixed">  
           {/* Header */}  
           <div className="p-6 border-b border-slate-700">  
             <div className="flex items-center gap-2 mb-1">  
