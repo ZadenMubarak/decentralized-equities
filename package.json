@@ -21,6 +21,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@massive.com/client-js": "^10.1.0",
     "@metamask/sdk": "^0.34.0",
     "@openzeppelin/contracts": "^5.4.0",
     "dotenv": "^17.2.1",
