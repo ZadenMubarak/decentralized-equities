@@ -19,6 +19,7 @@ import Trade from "./pages/Trade";
 import Transactions from "./pages/Transactions";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import StockPrice from "./pages/StockPrice.js";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,16 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+
+        <Route
+            path="/stock-price/:ticker"
+            element={
+              <Layout>
+                <StockPrice ticker="AAPL" />
+              </Layout>
+            }
+          />
+
           <Route
             path="/"
             element={
